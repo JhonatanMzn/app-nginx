@@ -1,0 +1,28 @@
+name: Deploy to EC2 in nginx
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+        - 'README.md'
+        - '.github/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.EC2_PUBLIC_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/html
+            git pull origin main
+            sudo systemctl restart nginx
