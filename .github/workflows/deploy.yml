@@ -25,6 +25,5 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/html
-            git config --global --add safe.directory /var/www/html
             sudo git pull origin main
             sudo systemctl restart nginx
